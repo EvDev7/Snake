@@ -32,6 +32,9 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		88D5DBFF2D0D44BD003B995F /* Snake */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			explicitFileTypes = {
+				image = image.png;
+			};
 			path = Snake;
 			sourceTree = "<group>";
 		};
