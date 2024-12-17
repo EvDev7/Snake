@@ -11,6 +11,7 @@ import SpriteKit
 class GameScene: SKScene {
     let sprite = SKSpriteNode(imageNamed: "image")
     var selectedNode: SKNode?
+    var touchOffset = CGPoint.zero
     
     override func didMove(to view: SKView) {
         backgroundColor = .blue
@@ -24,7 +25,6 @@ class GameScene: SKScene {
         
     }
     
-    //TODO: Put in actual logic here for handling touches.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Get the first touch
         if let touch = touches.first {
@@ -33,6 +33,10 @@ class GameScene: SKScene {
             // Select node when touched
             if let node = nodes(at: location).first {
                 selectedNode = node
+                touchOffset = CGPoint(
+                    x: location.x - node.position.x,
+                    y: location.y - node.position.y
+                )
             }
         }
     }
@@ -41,8 +45,20 @@ class GameScene: SKScene {
         guard let touch = touches.first, let node = selectedNode else { return }
         let location = touch.location(in: self)
         
-        // Update the node's position as the touch moves
-        node.position = location
+        node.position = CGPoint(
+            x: location.x - touchOffset.x,
+            y: location.y - touchOffset.y
+        )
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        selectedNode = nil
+        touchOffset = .zero
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        selectedNode = nil
+        touchOffset = .zero
     }
 }
 
