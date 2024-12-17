@@ -10,6 +10,7 @@ import SpriteKit
 
 class GameScene: SKScene {
     let sprite = SKSpriteNode(imageNamed: "image")
+    var selectedNode: SKNode?
     
     override func didMove(to view: SKView) {
         backgroundColor = .blue
@@ -17,11 +18,6 @@ class GameScene: SKScene {
         sprite.position = CGPoint(x: size.width / 2, y: size.height / 2)
         sprite.size = CGSize(width: 100, height: 100)
         addChild(sprite)
-        
-        // Add an action (e.g., rotation)
-        /*let rotateAction = SKAction.rotate(byAngle: .pi, duration: 1)
-        let repeatAction = SKAction.repeatForever(rotateAction)
-        sprite.run(repeatAction)*/
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -34,10 +30,19 @@ class GameScene: SKScene {
         if let touch = touches.first {
             let location = touch.location(in: self)
             
-            // Move the sprite to the touch location
-            sprite.position = location
-            print("Moved sprite to:", sprite.position)
+            // Select node when touched
+            if let node = nodes(at: location).first {
+                selectedNode = node
+            }
         }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first, let node = selectedNode else { return }
+        let location = touch.location(in: self)
+        
+        // Update the node's position as the touch moves
+        node.position = location
     }
 }
 
